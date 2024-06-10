@@ -44,7 +44,11 @@ extension MediaTrendViewController {
         mediaTableView.dataSource = self
         mediaTableView.rowHeight = 400
         mediaTableView.register(MediaTrendTableViewCell.self, forCellReuseIdentifier: MediaTrendTableViewCell.identifier)
+        
         navigationItem.title = "MEDIA TREND"
+     
+        
+        
         let listBarbtn = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(leftListBtnTapped))
         navigationItem.leftBarButtonItem = listBarbtn
         

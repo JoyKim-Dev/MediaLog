@@ -84,7 +84,7 @@ extension MediaTrendTableViewCell {
             
         }
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(releaseDateLabel.snp.bottom).offset(15)
+            make.top.equalTo(releaseDateLabel.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(25)
         }
         posterImageview.snp.makeConstraints { make in
@@ -130,11 +130,16 @@ extension MediaTrendTableViewCell {
         
        
        
-        contentView.backgroundColor = .systemPink.withAlphaComponent(0.2)
+        contentView.backgroundColor = .white
         
         containerView.layer.cornerRadius = 20
-        containerView.layer.masksToBounds = true
+        containerView.layer.masksToBounds = false
         containerView.backgroundColor = .white
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.5
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowRadius = 4
+        
         
         let url = URL(string: "https://image.tmdb.org/t/p/w1280\(data.backdrop_path)")
         posterImageview.kf.setImage(with: url)
@@ -153,8 +158,9 @@ extension MediaTrendTableViewCell {
         voteAverageLabel.font = .boldSystemFont(ofSize: 13)
         
         
-        releaseDateLabel.text = data.displayDate
-        releaseDateLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        releaseDateLabel.text = "개봉일: \(data.displayDate ?? "미정")"
+        releaseDateLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        releaseDateLabel.textColor = .black
         
 
         titleLabel.text = data.displayTitle
@@ -164,7 +170,7 @@ extension MediaTrendTableViewCell {
         
         
         originalTitleLabel.text = data.displayOriginalTitle
-        originalTitleLabel.font = .systemFont(ofSize: 14, weight: .heavy)
+        originalTitleLabel.font = .systemFont(ofSize: 14, weight: .bold)
         originalTitleLabel.textColor = .gray
         originalTitleLabel.textAlignment = .left
         
@@ -173,7 +179,7 @@ extension MediaTrendTableViewCell {
         furtherInfoLabel.text = "자세히 보기"
         furtherInfoLabel.textColor = .black
         furtherInfoLabel.textAlignment = .left
-        furtherInfoLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        furtherInfoLabel.font = .systemFont(ofSize: 13, weight: .regular)
         
         nextBtn.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         nextBtn.tintColor = .black

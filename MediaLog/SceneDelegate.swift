@@ -26,9 +26,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         
         let firstVC = MediaTrendViewController()
-        
         let firstNav = UINavigationController(rootViewController: firstVC)
         
+        firstNav.tabBarItem.image = UIImage(systemName: "house")
+        firstNav.tabBarItem.selectedImage = UIImage(systemName: "house.fill")
+        firstNav.tabBarItem.title = "홈"
         vc.viewControllers = [firstNav]
     }
 
