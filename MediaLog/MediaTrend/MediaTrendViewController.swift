@@ -39,13 +39,14 @@ extension MediaTrendViewController {
     }
     
     func configUI() {
-        view.backgroundColor = .white
+        configureView("MEDIA TREND")
+//        view.backgroundColor = .white
         mediaTableView.delegate = self
         mediaTableView.dataSource = self
         mediaTableView.rowHeight = 400
         mediaTableView.register(MediaTrendTableViewCell.self, forCellReuseIdentifier: MediaTrendTableViewCell.identifier)
         
-        navigationItem.title = "MEDIA TREND"
+//        navigationItem.title = "MEDIA TREND"
      
         
         
