@@ -21,7 +21,8 @@ class TabBarController: UITabBarController {
 extension TabBarController {
     
     func setTabBar() {
-        setViewControllers([navOne,navTwo], animated: true)
+        // 일단 작업중인 탭을 index0에 넣어둠. 나중에 순서 변경 필요
+        setViewControllers([navTwo,navOne], animated: true)
         setTabBarItem()
         
     }

@@ -61,7 +61,7 @@ extension MediaTrendViewController {
     func callRequest() {
         print(#function)
         
-        let url = APIURL.movieURL
+        let url = APIURL.mediaTrendURL
         
         let header: HTTPHeaders = [
             "Authorization": APIKey.movieKey,
