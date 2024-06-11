@@ -23,7 +23,6 @@ class MovieCollectionViewCell: UICollectionViewCell {
         
         configHierarchy()
         configLayout()
-        configUI()
         
     }
     
@@ -46,21 +45,36 @@ extension MovieCollectionViewCell {
         }
         
         movieTitleLabel.snp.makeConstraints { make in
-            make.leading.bottom.equalTo(moviePosterImageView).inset(5)
+            make.horizontalEdges.equalTo(moviePosterImageView)
+            make.bottom.lessThanOrEqualTo(moviePosterImageView)
+            
         }
     }
     
-    func configUI() {
+    func configUI(data: MovieResult) {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
         contentView.backgroundColor = .lightGray
         
-        moviePosterImageView.image = UIImage(systemName: "star")
+        if let image = data.poster_path {
+            let url = URL(string: "https://image.tmdb.org/t/p/w780\(image)")
+            moviePosterImageView.kf.setImage(with: url)
+        } else {
+            moviePosterImageView.image = UIImage(systemName: "star")
+        }
         moviePosterImageView.contentMode = .scaleAspectFill
         
-        movieTitleLabel.text = "영화제목"
+        if let title = data.title {
+            movieTitleLabel.text = " \(title)"
+        } else {
+            movieTitleLabel.text = "정보없음"
+        }
         movieTitleLabel.textColor = .white
         movieTitleLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        movieTitleLabel.numberOfLines = 0
+        movieTitleLabel.lineBreakMode = .byCharWrapping
+       movieTitleLabel.backgroundColor = .black.withAlphaComponent(0.5)
+
         
     }
 }
