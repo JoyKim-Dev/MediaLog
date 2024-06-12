@@ -63,7 +63,7 @@ extension MediaDetailCastTableViewCell {
             let url = URL(string: "https://image.tmdb.org/t/p/h632\(yesImage)")
             castImage.kf.setImage(with: url)
         } else {
-            castImage.image = UIImage(systemName: "star")
+            castImage.image = Constant.DummyImage.star
             castImage.contentMode = .scaleAspectFit
         }
         castImage.layer.borderColor = UIColor.black.cgColor
@@ -88,7 +88,7 @@ extension MediaDetailCastTableViewCell {
     
         characterNameLabel.textAlignment = .left
         characterNameLabel.font = .systemFont(ofSize: 16, weight: .regular)
-        characterNameLabel.textColor = .gray
+        characterNameLabel.textColor = Constant.TextColor.softGray
         
     }
     

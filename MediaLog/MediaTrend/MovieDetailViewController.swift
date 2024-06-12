@@ -135,29 +135,29 @@ extension MovieDetailViewController {
         print(dataFromPreviousPage?.backdrop_path ?? "nil")
         backdropImageView.kf.setImage(with: url)
         backdropImageView.contentMode = .scaleAspectFill
-        backdropImageView.backgroundColor = .blue
+    
         
         let url2 = URL(string: "https://image.tmdb.org/t/p/w780\(dataFromPreviousPage!.poster_path)")
         print(dataFromPreviousPage?.poster_path ?? "nil")
         mainImageView.kf.setImage(with: url2)
-        mainImageView.backgroundColor = .systemPink
+     
         
         originalTitleLabel.text = dataFromPreviousPage?.displayOriginalTitle
         originalTitleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
-        originalTitleLabel.textColor = .white
+        originalTitleLabel.textColor = Constant.TextColor.darkBGWhite
         originalTitleLabel.textAlignment = .left
         
         overViewLabel.text = "OverView"
         overViewLabel.font = .boldSystemFont(ofSize: 15)
-        overViewLabel.textColor = .gray
+        overViewLabel.textColor = Constant.TextColor.softGray
         overViewLabel.textAlignment = .left
         
         
-        lineView.backgroundColor = .gray
+        lineView.backgroundColor = Constant.Color.GrayLineBg
         
         overViewDetailLabel.text = dataFromPreviousPage?.overview
         overViewDetailLabel.font = .systemFont(ofSize: 15, weight: .regular)
-        overViewDetailLabel.textColor = .black
+        overViewDetailLabel.textColor = Constant.TextColor.defaultBlack
         overViewDetailLabel.textAlignment = .center
         overViewDetailLabel.numberOfLines = 2
         
@@ -168,10 +168,10 @@ extension MovieDetailViewController {
         
         
         castTitleLabel.text = "Cast"
-        castTitleLabel.textColor = .gray
+        castTitleLabel.textColor = Constant.TextColor.softGray
         castTitleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         
-        castLineView.backgroundColor = .gray
+        castLineView.backgroundColor = Constant.Color.GrayLineBg
        
         
     }
@@ -183,9 +183,9 @@ extension MovieDetailViewController {
         print(url)
         let header: HTTPHeaders = [
             "Authorization": APIKey.movieKey,
-            "accept": "application/json"
+            "accept": APIResponseStyle.tmdbJson
         ]
-        let param:Parameters = ["language": "ko-KR"]
+        let param:Parameters = ["language": APILanguage.tmdbKorean]
         
         AF.request(url, method: .get,parameters: param, headers: header)
             .validate(statusCode: 200..<300)

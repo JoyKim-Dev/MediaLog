@@ -13,7 +13,10 @@ import SnapKit
 
 class MediaTrendTableViewCell: UITableViewCell {
 
-    let containerView = UIView()
+    let containerView: UIView = {
+        let view = shadowView()
+        return view
+    }()
     let posterImageview = UIImageView()
     let voteStarImage = UIImageView()
     let voteAverageLabel = UILabel()
@@ -127,20 +130,9 @@ extension MediaTrendTableViewCell {
     }
     
     func configUI(data: Result) {
-        
-       
-       
+
         contentView.backgroundColor = .white
-        
-        containerView.layer.cornerRadius = 20
-        containerView.layer.masksToBounds = false
-        containerView.backgroundColor = .white
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.5
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        containerView.layer.shadowRadius = 4
-        
-        
+     
         let url = URL(string: "https://image.tmdb.org/t/p/w1280\(data.backdrop_path)")
         posterImageview.kf.setImage(with: url)
         posterImageview.contentMode = .scaleToFill
@@ -152,37 +144,37 @@ extension MediaTrendTableViewCell {
         
         
         voteStarImage.image = UIImage(systemName: "star.fill")
-        voteStarImage.tintColor = .red
+        voteStarImage.tintColor = Constant.Color.redAccentBtn
         
         voteAverageLabel.text = String(data.vote_average.rounded())
         voteAverageLabel.font = .boldSystemFont(ofSize: 13)
         
         
         releaseDateLabel.text = "개봉일: \(data.displayDate ?? "미정")"
-        releaseDateLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        releaseDateLabel.textColor = .black
+        releaseDateLabel.font = Constant.Font.defaultRegular13
+        releaseDateLabel.textColor = Constant.TextColor.defaultBlack
         
 
         titleLabel.text = data.displayTitle
         titleLabel.font = .systemFont(ofSize: 17, weight: .heavy)
-        titleLabel.textColor = .black
+        titleLabel.textColor = Constant.TextColor.defaultBlack
         titleLabel.textAlignment = .left
         
         
         originalTitleLabel.text = data.displayOriginalTitle
-        originalTitleLabel.font = .systemFont(ofSize: 14, weight: .bold)
-        originalTitleLabel.textColor = .gray
+        originalTitleLabel.font = Constant.Font.bold14
+        originalTitleLabel.textColor = Constant.TextColor.softGray
         originalTitleLabel.textAlignment = .left
         
-        lineView.backgroundColor = .gray
+        lineView.backgroundColor = Constant.Color.GrayLineBg
         
         furtherInfoLabel.text = "자세히 보기"
-        furtherInfoLabel.textColor = .black
+        furtherInfoLabel.textColor = Constant.TextColor.defaultBlack
         furtherInfoLabel.textAlignment = .left
-        furtherInfoLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        furtherInfoLabel.font = Constant.Font.defaultRegular13
         
         nextBtn.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        nextBtn.tintColor = .black
+        nextBtn.tintColor = Constant.Color.blackDefaultBtn
         
         voteStack.axis = .horizontal
         voteStack.spacing = 5

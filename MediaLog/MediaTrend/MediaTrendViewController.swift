@@ -65,10 +65,10 @@ extension MediaTrendViewController {
         
         let header: HTTPHeaders = [
             "Authorization": APIKey.movieKey,
-                      "accept": "application/json"
+            "accept": APIResponseStyle.tmdbJson
         ]
         
-        let param: Parameters = ["language": "ko-KR"]
+        let param: Parameters = ["language": APILanguage.tmdbKorean]
         
         AF.request(url, method: .get, parameters: param, headers: header)
             .validate(statusCode: 200..<300)

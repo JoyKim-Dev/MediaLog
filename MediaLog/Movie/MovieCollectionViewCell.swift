@@ -54,13 +54,13 @@ extension MovieCollectionViewCell {
     func configUI(data: MovieResult) {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
-        contentView.backgroundColor = .lightGray
+        contentView.backgroundColor = Constant.Color.GrayLineBg
         
         if let image = data.poster_path {
             let url = URL(string: "https://image.tmdb.org/t/p/w780\(image)")
             moviePosterImageView.kf.setImage(with: url)
         } else {
-            moviePosterImageView.image = UIImage(systemName: "star")
+            moviePosterImageView.image = Constant.DummyImage.star
         }
         moviePosterImageView.contentMode = .scaleAspectFill
         
@@ -69,11 +69,11 @@ extension MovieCollectionViewCell {
         } else {
             movieTitleLabel.text = "정보없음"
         }
-        movieTitleLabel.textColor = .white
+        movieTitleLabel.textColor = Constant.TextColor.darkBGWhite
         movieTitleLabel.font = .systemFont(ofSize: 13, weight: .semibold)
         movieTitleLabel.numberOfLines = 0
         movieTitleLabel.lineBreakMode = .byCharWrapping
-       movieTitleLabel.backgroundColor = .black.withAlphaComponent(0.5)
+        movieTitleLabel.backgroundColor = .black.withAlphaComponent(0.5)
 
         
     }

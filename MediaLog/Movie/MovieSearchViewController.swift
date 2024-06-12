@@ -90,13 +90,13 @@ extension MovieSearchViewController {
         
         let header: HTTPHeaders = [
             "Authorization": APIKey.movieKey,
-            "accept": "application/json"
+            "accept": APIResponseStyle.tmdbJson
         ]
         
         let param: Parameters = [
             "query": query,
             "page": page,
-            "language": "ko-KR"
+            "language": APILanguage.tmdbKorean
         ]
         
         AF.request(url, method: .get,parameters: param,headers: header)

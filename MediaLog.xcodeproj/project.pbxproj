@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3517632A2C19D8A600349455 /* ViewShadowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351763292C19D8A600349455 /* ViewShadowEffect.swift */; };
+		3517632D2C19DDF800349455 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3517632C2C19DDF800349455 /* Constant.swift */; };
 		35754E092C18412800B1B8F0 /* MediaDetailCastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E082C18412800B1B8F0 /* MediaDetailCastTableViewCell.swift */; };
 		35754E0B2C18477400B1B8F0 /* CastInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E0A2C18477400B1B8F0 /* CastInfo.swift */; };
 		35754E0D2C18980C00B1B8F0 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E0C2C18980C00B1B8F0 /* TabBarController.swift */; };
@@ -32,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		351763292C19D8A600349455 /* ViewShadowEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewShadowEffect.swift; sourceTree = "<group>"; };
+		3517632C2C19DDF800349455 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		35754E082C18412800B1B8F0 /* MediaDetailCastTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDetailCastTableViewCell.swift; sourceTree = "<group>"; };
 		35754E0A2C18477400B1B8F0 /* CastInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastInfo.swift; sourceTree = "<group>"; };
 		35754E0C2C18980C00B1B8F0 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -69,6 +73,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		351763282C19D11400349455 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				351763292C19D8A600349455 /* ViewShadowEffect.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		3517632B2C19DDEC00349455 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				3517632C2C19DDF800349455 /* Constant.swift */,
+			);
+			path = Constant;
+			sourceTree = "<group>";
+		};
 		35F25F1D2C16F53F000917C9 = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +110,8 @@
 		35F25F282C16F53F000917C9 /* MediaLog */ = {
 			isa = PBXGroup;
 			children = (
+				3517632B2C19DDEC00349455 /* Constant */,
+				351763282C19D11400349455 /* CustomView */,
 				35F25F4E2C170A48000917C9 /* ReuseIdentifierProtocol.swift */,
 				35754E102C189BF500B1B8F0 /* VC + Extension.swift */,
 				35754E0C2C18980C00B1B8F0 /* TabBarController.swift */,
@@ -240,9 +262,11 @@
 				35F25F472C16FB44000917C9 /* APIKey.swift in Sources */,
 				35F25F492C16FF33000917C9 /* MediaTrendInfo.swift in Sources */,
 				35754E152C18A92A00B1B8F0 /* MovieInfo.swift in Sources */,
+				3517632A2C19D8A600349455 /* ViewShadowEffect.swift in Sources */,
 				35754E0F2C1898DD00B1B8F0 /* MovieSearchViewController.swift in Sources */,
 				35754E092C18412800B1B8F0 /* MediaDetailCastTableViewCell.swift in Sources */,
 				35F25F2C2C16F53F000917C9 /* SceneDelegate.swift in Sources */,
+				3517632D2C19DDF800349455 /* Constant.swift in Sources */,
 				35754E0B2C18477400B1B8F0 /* CastInfo.swift in Sources */,
 				35754E112C189BF500B1B8F0 /* VC + Extension.swift in Sources */,
 				35754E0D2C18980C00B1B8F0 /* TabBarController.swift in Sources */,
