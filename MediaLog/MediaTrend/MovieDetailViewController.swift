@@ -4,6 +4,8 @@
 //
 //  Created by Joy Kim on 6/10/24.
 //
+// 문제점 : 섹션마다 별도의 스크롤이 적용 안됨 / 헤더뷰가 보여지지 않음 / 스크롤뷰가 작동되지 않아 캐스트 테이블뷰가 가려짐 ㅠㅠ
+
 
 import UIKit
 
@@ -15,7 +17,11 @@ class MovieDetailViewController: UIViewController {
 
     var dataFromPreviousPage: Result?
     var castInfo = CastInfo(id: 0, cast: [])
+    var similarInfo = Similar(page: 0, results: [])
+    var recomInfo = Recom(page: 0, results: [])
     
+    let scrollView = UIScrollView()
+    let contentsView = UIView()
     let mainImageView = UIImageView()
     let backdropImageView = UIImageView()
     let originalTitleLabel = UILabel()
@@ -23,6 +29,7 @@ class MovieDetailViewController: UIViewController {
     let overViewDetailLabel = UILabel()
     let lineView = UIView()
     let overViewBtn = UIButton()
+    lazy var contentsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
     let castTableView = UITableView()
     let castTitleLabel = UILabel()
     let castLineView = UIView()
@@ -35,6 +42,8 @@ class MovieDetailViewController: UIViewController {
         configLayout()
         configUI()
         callRequest()
+        callRequestForSimilarMovie()
+        callRequestForRecomMovie()
     }
     
 }
@@ -42,21 +51,35 @@ class MovieDetailViewController: UIViewController {
 extension MovieDetailViewController {
     
     func configHierarchy() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentsView)
+       
         
-        view.addSubview(backdropImageView)
-        view.addSubview(mainImageView)
-        view.addSubview(originalTitleLabel)
-        view.addSubview(overViewLabel)
-        view.addSubview(overViewDetailLabel)
-        view.addSubview(lineView)
-        view.addSubview(overViewBtn)
-        view.addSubview(castTitleLabel)
-        view.addSubview(castLineView)
-        view.addSubview(castTableView)
+        contentsView.addSubview(backdropImageView)
+        contentsView.addSubview(mainImageView)
+        contentsView.addSubview(originalTitleLabel)
+        contentsView.addSubview(overViewLabel)
+        contentsView.addSubview(overViewDetailLabel)
+        contentsView.addSubview(lineView)
+        contentsView.addSubview(overViewBtn)
+        contentsView.addSubview(contentsCollectionView)
+        contentsView.addSubview(castTitleLabel)
+        contentsView.addSubview(castLineView)
+        contentsView.addSubview(castTableView)
         
     }
     
     func configLayout() {
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalTo(view)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentsView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+            make.width.equalTo(view)
+        }
         
         backdropImageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
@@ -89,17 +112,23 @@ extension MovieDetailViewController {
         overViewDetailLabel.snp.makeConstraints { make in
             make.top.equalTo(lineView.snp.bottom).offset(15)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.bottom.lessThanOrEqualTo(view).offset(-20)
+           make.bottom.lessThanOrEqualTo(view).offset(-20)
         }
         
         overViewBtn.snp.makeConstraints { make in
             make.centerX.equalTo(view.safeAreaLayoutGuide)
             make.top.equalTo(overViewDetailLabel.snp.bottom).offset(5)
         }
-  
+        
+        contentsCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(overViewBtn.snp.bottom).offset(3)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(300)
+        }
+
         castTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.top.equalTo(overViewBtn.snp.bottom).offset(3)
+            make.top.equalTo(contentsCollectionView.snp.bottom).offset(3)
         }
         
         castLineView.snp.makeConstraints { make in
@@ -114,9 +143,6 @@ extension MovieDetailViewController {
             make.top.equalTo(castLineView.snp.bottom).offset(5)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
-        
-     
-        
     }
     
     func configUI() {
@@ -125,6 +151,13 @@ extension MovieDetailViewController {
         castTableView.dataSource = self
         castTableView.register(MediaDetailCastTableViewCell.self, forCellReuseIdentifier: MediaDetailCastTableViewCell.identifier)
         castTableView.rowHeight = 120
+        
+        contentsCollectionView.delegate = self
+        contentsCollectionView.dataSource = self
+        contentsCollectionView.register(ContentsCollectionViewCell.self, forCellWithReuseIdentifier: ContentsCollectionViewCell.identifier)
+        contentsCollectionView.register(CustomCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CustomCollectionHeaderView.identifier)
+        
+        contentsCollectionView.backgroundColor = .blue
         
         navigationItem.title = dataFromPreviousPage?.displayTitle
         
@@ -172,8 +205,20 @@ extension MovieDetailViewController {
         castTitleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         
         castLineView.backgroundColor = Constant.Color.GrayLineBg
-       
-        
+    }
+    
+    func collectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let sectionSpacing:CGFloat = 2
+        let cellSpacing:CGFloat = 4
+
+        layout.itemSize = CGSize(width: 100, height: 140)
+        layout.scrollDirection = .horizontal
+
+        layout.minimumInteritemSpacing = cellSpacing
+        layout.minimumLineSpacing = cellSpacing
+        layout.sectionInset = UIEdgeInsets(top: sectionSpacing, left: sectionSpacing, bottom: sectionSpacing, right: sectionSpacing)
+        return layout
     }
     
     func callRequest() {
@@ -203,13 +248,66 @@ extension MovieDetailViewController {
                     
                 case .failure(let error):
                     print(error)
-                    
                 }
             }
-        
-        
     }
     
+    func callRequestForSimilarMovie() {
+ 
+        let url = APIURL.similarMovieURL(id: dataFromPreviousPage?.id ?? 0)
+        print(url)
+        let header: HTTPHeaders = [
+            "Authorization": APIKey.movieKey,
+            "accept": APIResponseStyle.tmdbJson
+        ]
+        let param:Parameters = ["language": APILanguage.tmdbKorean]
+        
+        AF.request(url, method: .get,parameters: param, headers: header)
+            .validate(statusCode: 200..<300)
+//            .responseString { response in
+//                dump(response)
+//            }
+            .responseDecodable(of: Similar.self) { response in
+                print("STATUS: \(response.response?.statusCode ?? 0)")
+                switch response.result {
+                case .success(let value):
+                    
+                    self.similarInfo = value
+                    self.contentsCollectionView.reloadData()
+                    
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
+    func callRequestForRecomMovie() {
+ 
+        let url = APIURL.recomMovieURL(id: dataFromPreviousPage?.id ?? 0)
+        print(url)
+        let header: HTTPHeaders = [
+            "Authorization": APIKey.movieKey,
+            "accept": APIResponseStyle.tmdbJson
+        ]
+        let param:Parameters = ["language": APILanguage.tmdbKorean]
+        
+        AF.request(url, method: .get,parameters: param, headers: header)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: Recom.self) { response in
+                print("STATUS: \(response.response?.statusCode ?? 0)")
+                switch response.result {
+                case .success(let value):
+                    
+                    self.recomInfo = value
+                    self.contentsCollectionView.reloadData()
+                    
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
     @objc func backBarBtnTapped() {
         
         dismiss(animated: true)
@@ -244,8 +342,44 @@ extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         
         return cell
     }
-    
-    
-    
-    
 }
+
+extension MovieDetailViewController: UICollectionViewDelegate,UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentsCollectionViewCell.identifier, for: indexPath) as! ContentsCollectionViewCell
+          cell.backgroundColor = .red
+        if indexPath.section == 0 {
+            cell.configUI(data: similarInfo.results[indexPath.row], indexPath: indexPath)
+            
+        } else {
+            cell.configUI2(data: recomInfo.results[indexPath.row], indexPath: indexPath)
+        }
+        return cell
+      }
+
+      func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+          return CGSize(width: collectionView.frame.width, height: 20)
+      }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+           
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CustomCollectionHeaderView.identifier, for: indexPath) as? CustomCollectionHeaderView else {
+                    return CustomCollectionHeaderView()
+                }
+                header.configure()
+                return header
+            }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return similarInfo.results.count
+        } else {
+        return recomInfo.results.count}
+    }
+    }

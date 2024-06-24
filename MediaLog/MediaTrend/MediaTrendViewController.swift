@@ -82,21 +82,15 @@ extension MediaTrendViewController {
                     print("값리로드완료")
             case .failure(let error):
                 print(error)
-        
             }
         }
-   
     }
     
     @objc func leftListBtnTapped() {
-        
     }
-    
     @objc func searchBarbtnTapped() {
-        
     }
-    
-    
+  
 }
 
 extension MediaTrendViewController: UITableViewDelegate, UITableViewDataSource {

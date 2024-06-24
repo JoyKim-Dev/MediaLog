@@ -1,23 +1,23 @@
 //
-//  MediaTrendInfo.swift
+//  RecomMovieInfo.swift
 //  MediaLog
 //
-//  Created by Joy Kim on 6/10/24.
+//  Created by Joy Kim on 6/24/24.
 //
 
 import Foundation
 
-struct Media: Decodable {
+struct Recom: Decodable {
     let page: Int
-    let results: [Result]
+    let results: [RecomResult]
 }
 
-struct Result: Decodable {
+struct RecomResult: Decodable {
     let original_title: String?
     let original_name: String?
     let overview: String
     let poster_path: String?
-    let backdrop_path: String
+    let backdrop_path: String?
     let adult: Bool
     let title: String?
     let name: String?

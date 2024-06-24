@@ -8,9 +8,8 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    
-    let navOne = UINavigationController(rootViewController: MediaTrendViewController())
-    let navTwo = UINavigationController(rootViewController: MovieSearchViewController())
+    let trendHomeVC = UINavigationController(rootViewController: MediaTrendViewController())
+    let movieSearchVC = UINavigationController(rootViewController: MovieSearchViewController())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +20,17 @@ class TabBarController: UITabBarController {
 extension TabBarController {
     
     func setTabBar() {
-        // 일단 작업중인 탭을 index0에 넣어둠. 나중에 순서 변경 필요
-        setViewControllers([navTwo,navOne], animated: true)
+        tabBar.tintColor = UIColor.accent
+        setViewControllers([trendHomeVC, movieSearchVC], animated: true)
         setTabBarItem()
         
     }
     
     func setTabBarItem() {
-        navOne.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
-        navTwo.tabBarItem = UITabBarItem(title: "영화", image: UIImage(systemName: "movieclapper"), selectedImage: UIImage(systemName: "movieClapper.fill"))
+        trendHomeVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        movieSearchVC.tabBarItem = UITabBarItem(title: "영화", image: UIImage(systemName: "movieclapper"), selectedImage: UIImage(systemName: "movieClapper.fill"))
     }
  
 }
+
+
