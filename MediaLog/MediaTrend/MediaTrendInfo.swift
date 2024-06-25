@@ -16,7 +16,7 @@ struct Result: Decodable {
     let original_title: String?
     let original_name: String?
     let overview: String
-    let poster_path: String?
+    let poster_path: String
     let backdrop_path: String
     let adult: Bool
     let title: String?

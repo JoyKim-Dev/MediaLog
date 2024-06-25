@@ -22,7 +22,6 @@ class MediaTrendViewController: UIViewController {
         configUI()
         callRequest()
     }
-    
 }
 
 extension MediaTrendViewController {
@@ -40,16 +39,11 @@ extension MediaTrendViewController {
     
     func configUI() {
         configureView("MEDIA TREND")
-//        view.backgroundColor = .white
         mediaTableView.delegate = self
         mediaTableView.dataSource = self
         mediaTableView.rowHeight = 400
         mediaTableView.register(MediaTrendTableViewCell.self, forCellReuseIdentifier: MediaTrendTableViewCell.identifier)
-        
-//        navigationItem.title = "MEDIA TREND"
-     
-        
-        
+  
         let listBarbtn = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(leftListBtnTapped))
         navigationItem.leftBarButtonItem = listBarbtn
         
@@ -110,14 +104,12 @@ extension MediaTrendViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let data = list[indexPath.row]
-        let vc = MovieDetailViewController()
+        let vc = TrendDetailViewController()
         
         vc.dataFromPreviousPage = data
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
-        
     }
-
-    
+  
 }
