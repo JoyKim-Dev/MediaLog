@@ -18,13 +18,13 @@ class TrendDetailViewController: BaseViewController {
     let mainImageView = UIImageView()
     let mainTitleLabel = UILabel()
     
-    var imageList: [[SimilarResult]] = [[],[]]
+    var imageList: [[Result]] = [[],[]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         callRequest()
     }
-
+    
     override func configureHierarchy() {
         view.addSubview(tableView)
         view.addSubview(mainImageView)
@@ -72,28 +72,39 @@ class TrendDetailViewController: BaseViewController {
     }
     
     func callRequest() {
-        print(#function)
         
-        let group = DispatchGroup() // + 1
+        let group = DispatchGroup()
         
-        group.enter() // 작업량 + 1
+        group.enter()
         DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.similarMovie(id: self.dataFromPreviousPage?.id ?? 0) { data in
-                self.imageList[0] = data
-                print("시밀러 네트워킹")
+            NetworkManager.shared.movieData(api: .similarMovie(id: self.dataFromPreviousPage?.id ?? 0)) { movie, error in
+                if let error = error {
+                    print("에러남\(error)")
+                } else {
+                    guard let movie = movie else {return}
+                    self.imageList[0] = movie
+                    print("리스트에 비슷한 영화 정보 데이터 잘 담김-> 여기서 포스터 추출해서 이미지 넣기1")
+                }
                 group.leave()
             }
         }
-        group.enter() // 작업량 + 1
+        
+        group.enter()
         DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.recommendMovie(id: self.dataFromPreviousPage?.id ?? 0) { data in
-                self.imageList[1] = data
-                group.leave() // - 1
+            NetworkManager.shared.movieData(api: .recommendMovie(id: self.dataFromPreviousPage?.id ?? 0)) { movie, error in
+                if let error = error {
+                    print("에러남\(error)")
+                } else {
+                    guard let movie = movie else {return}
+                    self.imageList[1] = movie
+                    print("리스트에 추천 영화 정보 데이터 잘 담김-> 여기서 포스터 추출해서 이미지 넣기2")
+                }
+                group.leave()
             }
         }
         group.notify(queue: .main) {
+            print("작업 끝!")
             self.tableView.reloadData()
-            print("통신 마치고 리스트 업데이트함")
         }
     }
 }
@@ -112,7 +123,7 @@ extension TrendDetailViewController: UITableViewDelegate, UITableViewDataSource 
         cell.collectionView.tag = indexPath.row
         cell.collectionView.reloadData()
         cell.configureView(data: indexPath.row)
-      
+        
         return cell
     }
 }

@@ -42,14 +42,15 @@ extension ContentsCollectionViewCell {
         }
         
     }
-    func configUI(data: SimilarResult) {
+    func configUI(data: Result) {
         
-        let url = URL(string: "https://image.tmdb.org/t/p/w780\(data.poster_path)")
-        moviePosterImageView.kf.setImage(with: url)
-        
-        
+        if let valid = data.poster_path {
+            let url = URL(string: "https://image.tmdb.org/t/p/w780\(valid)")
+            moviePosterImageView.kf.setImage(with: url)
+        } else {
+            moviePosterImageView.image = Constant.DummyImage.star
+        }
     }
-    
 
     
 //    func configUI(data: SimilarResult, indexPath: IndexPath) {

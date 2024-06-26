@@ -51,7 +51,7 @@ extension MovieCollectionViewCell {
         }
     }
     
-    func configUI(data: MovieResult) {
+    func configUI(data: Result) {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
         contentView.backgroundColor = Constant.Color.GrayLineBg
@@ -75,6 +75,5 @@ extension MovieCollectionViewCell {
         movieTitleLabel.lineBreakMode = .byCharWrapping
         movieTitleLabel.backgroundColor = .black.withAlphaComponent(0.5)
 
-        
     }
 }

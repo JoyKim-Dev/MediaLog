@@ -10,17 +10,18 @@ import SnapKit
 import Alamofire
 
 class MediaTrendViewController: UIViewController {
-
+    
     let mediaTableView = UITableView()
     var list: [Result] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configHierarchy()
         configLayout()
         configUI()
-        callRequest()
+        callRequest() //무비 트렌드 데이터 받아오기
+
     }
 }
 
@@ -28,7 +29,6 @@ extension MediaTrendViewController {
     
     func configHierarchy() {
         view.addSubview(mediaTableView)
-       
     }
     
     func configLayout() {
@@ -53,33 +53,21 @@ extension MediaTrendViewController {
     }
     
     func callRequest() {
-        print(#function)
-        
-        let url = APIURL.mediaTrendURL
-        
-        let header: HTTPHeaders = [
-            "Authorization": APIKey.movieKey,
-            "accept": APIResponseStyle.tmdbJson
-        ]
-        
-        let param: Parameters = ["language": APILanguage.tmdbKorean]
-        
-        AF.request(url, method: .get, parameters: param, headers: header)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: Media.self) { response in
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                switch response.result {
-            case .success(let value):
-                print("SUCCESS")
-                    self.list = value.results
-                    self.mediaTableView.reloadData()
-                    print("값리로드완료")
-            case .failure(let error):
-                print(error)
+        NetworkManager.shared.movieData(api: .trendingMovie(time: .day)) { movie, error in
+           
+            if let error = error {
+                print("에러남\(error)")
+            } else {
+                guard let movie = movie else {return}
+                self.list = movie
+                self.mediaTableView.reloadData()
+                print("리스트에 무비 트렌드 데이터 잘 담김")
+                dump(movie)
             }
         }
     }
     
+
     @objc func leftListBtnTapped() {
     }
     @objc func searchBarbtnTapped() {
@@ -89,7 +77,7 @@ extension MediaTrendViewController {
 
 extension MediaTrendViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(list.count)
+        print("셀\(list.count)개")
         return list.count
     }
     

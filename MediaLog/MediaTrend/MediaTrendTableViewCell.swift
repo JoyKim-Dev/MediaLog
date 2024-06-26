@@ -12,7 +12,7 @@ import SnapKit
 
 
 class MediaTrendTableViewCell: UITableViewCell {
-
+    
     let containerView: UIView = {
         let view = shadowView()
         return view
@@ -130,9 +130,12 @@ extension MediaTrendTableViewCell {
     func configUI(data: Result) {
 
         contentView.backgroundColor = .white
-     
-        let url = URL(string: "https://image.tmdb.org/t/p/w1280\(data.backdrop_path)")
-        posterImageview.kf.setImage(with: url)
+        
+        if let valid = data.backdrop_path {
+            let url = URL(string: "https://image.tmdb.org/t/p/w1280\(valid)")
+            posterImageview.kf.setImage(with:url)
+        }
+        
         posterImageview.contentMode = .scaleToFill
         
         saveBtn.setImage(UIImage(systemName: "paperclip"), for: .normal)
@@ -144,7 +147,9 @@ extension MediaTrendTableViewCell {
         voteStarImage.image = UIImage(systemName: "star.fill")
         voteStarImage.tintColor = Constant.Color.redAccentBtn
         
-        voteAverageLabel.text = String(data.vote_average.rounded())
+        if let voteAverage = data.vote_average {
+            voteAverageLabel.text = String(voteAverage.rounded())
+        }
         voteAverageLabel.font = .boldSystemFont(ofSize: 13)
         
         

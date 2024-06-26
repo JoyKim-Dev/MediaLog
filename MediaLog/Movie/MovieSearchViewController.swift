@@ -17,7 +17,7 @@ class MovieSearchViewController: UIViewController {
     lazy var movieCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
     
     var page = 1
-    var list = Movie(page: 1, results: [])
+    var list = Media(page: 1, results: [])
     
     
     override func viewDidLoad() {
@@ -26,10 +26,9 @@ class MovieSearchViewController: UIViewController {
         configHierarchy()
         configLayout()
         configUI()
-     
-       
     }
-    
+        
+
     func collectionViewLayout() -> UICollectionViewLayout {
         
         print(#function)
@@ -44,9 +43,7 @@ class MovieSearchViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
         return layout
-    
     }
-  
 }
 
 extension MovieSearchViewController {
@@ -80,58 +77,45 @@ extension MovieSearchViewController {
         searchBar.delegate = self
         searchBar.placeholder = "영화를 검색해보세요"
         
-    
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+                   tap.cancelsTouchesInView = false
+                   view.addGestureRecognizer(tap)
     }
     
     func callRequest(query: String) {
         print(#function)
         
-        let url = APIURL.movieURL
-        
-        let header: HTTPHeaders = [
-            "Authorization": APIKey.movieKey,
-            "accept": APIResponseStyle.tmdbJson
-        ]
-        
-        let param: Parameters = [
-            "query": query,
-            "page": page,
-            "language": APILanguage.tmdbKorean
-        ]
-        
-        AF.request(url, method: .get,parameters: param,headers: header)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: Movie.self) { response in
-                print("STATUS: \(response.response?.statusCode ?? 0)")
-                switch response.result {
-                case .success(let value):
-                    print("SUCCESS")
-                    
-                    if self.page == 1 {
-                        self.list = value
-                        self.movieCollectionView.scrollToItem(at: IndexPath(item: -1, section: 0), at: .top, animated: false)
-                    } else {
-                        self.list.results.append(contentsOf: value.results)
-                    }
-                    
-                  //  print(self.list)
-                    // 리로드 데이터 까먹지 말자..!!!!!!!!!!! 서치바 누르면 쿼리 전달되는 것 확인 -> 응답 성공 확인 -> 값 식판 담기는지 확인 -> 셀 갯수 확인 -> 검색되는데도 계속 0이면 리로드 확인
-                    self.movieCollectionView.reloadData()
-                    
-                case .failure(let error):
-                    print(error)
-                    
+        NetworkManager.shared.allMovieData(api: .movieList(query: searchBar.text ?? "미정", page: page)) { movie, error in
+            
+            if error != nil {
+                print("에러 발생")
+            } else {
+                guard let movie = movie else {return}
+                
+                if self.page == 1 {
+                    self.list = movie
+                    self.movieCollectionView.scrollToItem(at: IndexPath(item: -1, section: 0), at: .top, animated: false)
+                } else {
+                    self.list.results.append(contentsOf: movie.results)
                 }
+
+                self.movieCollectionView.reloadData()
+                print("데이터 잘 담아짐 리스트에")
             }
-        
+        }
     }
+    
+func dismissKeyboard(_ searchBar: UISearchBar) {
+            searchBar.resignFirstResponder()
+        }
+    
+
 }
 
 extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         print(list.results.count)
         return list.results.count
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -141,21 +125,21 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
         cell.configUI(data: data)
         return cell
     }
-    
-    
-    
 }
 
 extension MovieSearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
+        dismissKeyboard(searchBar)
         page = 1
         callRequest(query: searchBar.text!)
         print(#function)
     }
-
-}
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+dismissKeyboard(searchBar)
+        }
+    }
 
 extension MovieSearchViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
