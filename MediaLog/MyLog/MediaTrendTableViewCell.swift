@@ -152,19 +152,19 @@ extension MediaTrendTableViewCell {
         }
         voteAverageLabel.font = .boldSystemFont(ofSize: 13)
         
+        releaseDateLabel.text = "개봉일:\(data.release_date ?? "")"
         
-        releaseDateLabel.text = "개봉일: \(data.displayDate ?? "미정")"
+        
         releaseDateLabel.font = Constant.Font.defaultRegular13
         releaseDateLabel.textColor = Constant.TextColor.defaultBlack
         
-
-        titleLabel.text = data.displayTitle
+        titleLabel.text = data.title
         titleLabel.font = .systemFont(ofSize: 17, weight: .heavy)
         titleLabel.textColor = Constant.TextColor.defaultBlack
         titleLabel.textAlignment = .left
         
-        
-        originalTitleLabel.text = data.displayOriginalTitle
+  
+        originalTitleLabel.text = data.original_title ?? ""
         originalTitleLabel.font = Constant.Font.bold14
         originalTitleLabel.textColor = Constant.TextColor.softGray
         originalTitleLabel.textAlignment = .left

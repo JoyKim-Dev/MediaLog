@@ -18,6 +18,14 @@ enum Region: String {
     case usa = "US"
 }
 
+//에러 프로토콜 채택하여 에러 상황 예외처리 옵션 구성
+enum RequestError: Error {
+    case failedRequest
+    case noData
+    case invalidResponse
+    case invalidData
+}
+
 enum TMDBRequest {
     // path parameter & query parameter 처리: 열거형 연관값 사용
     case movieList(query: String, page: Int)

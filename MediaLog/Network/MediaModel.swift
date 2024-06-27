@@ -29,6 +29,7 @@ struct Result: Decodable {
     let vote_average: Double?
     let vote_count: Int?
     let id: Int?
+    let media_type: String?
     
     var displayTitle: String? {
         return title ?? name

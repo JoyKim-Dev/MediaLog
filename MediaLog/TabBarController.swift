@@ -8,8 +8,9 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    let trendHomeVC = UINavigationController(rootViewController: MediaTrendViewController())
+    let myLogMainVC = UINavigationController(rootViewController: MediaTrendViewController())
     let movieSearchVC = UINavigationController(rootViewController: MovieSearchViewController())
+    let movieHomeMainVC = UINavigationController(rootViewController: MovieHomeViewController())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,16 +22,18 @@ extension TabBarController {
     
     func setTabBar() {
         tabBar.tintColor = UIColor.accent
-        setViewControllers([trendHomeVC, movieSearchVC], animated: true)
+        setViewControllers([movieHomeMainVC,myLogMainVC, movieSearchVC], animated: true)
         setTabBarItem()
         
     }
     
     func setTabBarItem() {
-        trendHomeVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
-       movieSearchVC.tabBarItem = UITabBarItem(title: "영화", image: UIImage(systemName: "movieclapper"), selectedImage: UIImage(systemName: "movieClapper.fill"))
+        movieHomeMainVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        
+        movieSearchVC.tabBarItem = UITabBarItem(title: "검색", image: UIImage(systemName: "magnifyingglass"), selectedImage: UIImage(systemName: "magnifyingglass"))
+
+        myLogMainVC.tabBarItem = UITabBarItem(title: "저장소", image: UIImage(systemName: "movieclapper"), selectedImage: UIImage(systemName: "movieclapper.fill"))
     }
- 
 }
 
 

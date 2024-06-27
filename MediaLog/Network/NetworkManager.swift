@@ -15,10 +15,37 @@ class NetworkManager {
     static let shared = NetworkManager()
     private init() {}
     
-    typealias AllMovieDataHandler = (Media?, String?) -> Void
-    typealias MovieDataHandler = ([Result]?, String?) -> Void
-    typealias CastDataHandler = ([CastDetail]?, String?) -> Void
-    typealias PosterDataHandler = ([PosterDetail]?, String?) -> Void
+    typealias AllMovieDataHandler = (Media?, RequestError?) -> Void
+    typealias MovieDataHandler = ([Result]?, RequestError?) -> Void
+    typealias CastDataHandler = ([CastDetail]?, RequestError?) -> Void
+    typealias PosterDataHandler = ([PosterDetail]?, RequestError?) -> Void
+    typealias GenericHandler<T: Decodable> = (T?, RequestError?) -> Void
+    
+    
+    func request<T: Decodable>(api: TMDBRequest, model: T.Type, completionHandler: @escaping GenericHandler<T>) {
+        
+        AF.request(api.endpoint,
+                   method: api.method,
+                   parameters: api.parameter,
+                   encoding: URLEncoding(destination: .queryString),
+                   headers: api.header)
+        .responseDecodable(of: T.self) { response in
+            print("STATUS: \(response.response?.statusCode ?? 0)")
+            
+            switch response.result {
+                // 여기도 enum 연관값 활용!
+            case .success(let value):
+                //dump(value.results)
+                completionHandler(value, nil)
+                
+            case .failure(let error):
+                print(error)
+                // 튜플
+                completionHandler(nil, .failedRequest)
+            }
+        }
+    
+    }
     
     func allMovieData(api: TMDBRequest, completionHandler: @escaping AllMovieDataHandler) {
         print(#function)
@@ -40,7 +67,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error)
                 // 튜플
-                completionHandler(nil, "잠시 후 다시 시도해주세요.")
+                completionHandler(nil, .failedRequest)
             }
         }
     }
@@ -65,7 +92,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error)
                 // 튜플
-                completionHandler(nil, "잠시 후 다시 시도해주세요.")
+                completionHandler(nil, .failedRequest)
             }
         }
     }
@@ -90,7 +117,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error)
                 // 튜플
-                completionHandler(nil, "잠시 후 다시 시도해주세요.")
+                completionHandler(nil, .failedRequest)
             }
         }
     }
@@ -115,7 +142,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error)
                 // 튜플
-                completionHandler(nil, "잠시 후 다시 시도해주세요.")
+                completionHandler(nil, .failedRequest)
             }
         }
     }
