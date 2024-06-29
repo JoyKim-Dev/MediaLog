@@ -17,7 +17,7 @@ class NetworkManager {
     
     typealias AllMovieDataHandler = (Media?, RequestError?) -> Void
     typealias MovieDataHandler = ([Result]?, RequestError?) -> Void
-    typealias CastDataHandler = ([CastDetail]?, RequestError?) -> Void
+    typealias CastDataHandler = (CastInfo?, RequestError?) -> Void
     typealias PosterDataHandler = ([PosterDetail]?, RequestError?) -> Void
     typealias GenericHandler<T: Decodable> = (T?, RequestError?) -> Void
     
@@ -112,7 +112,7 @@ class NetworkManager {
                 // 여기도 enum 연관값 활용!
             case .success(let value):
                 //dump(value.results)
-                completionHandler(value.cast, nil)
+                completionHandler(value, nil)
                 
             case .failure(let error):
                 print(error)

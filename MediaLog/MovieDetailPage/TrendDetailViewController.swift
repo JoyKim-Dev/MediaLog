@@ -13,25 +13,28 @@ import Kingfisher
 
 class TrendDetailViewController: BaseViewController {
     
-    var dataFromPreviousPage: Result?
+    
     let tableView = UITableView()
     let mainImageView = UIImageView()
     let mainTitleLabel = UILabel()
     
-    var imageList: [[Result]] = [[],[]]
+    var dataFromPreviousPage: Result?
+    var movieData = Media(page: 0, results: [])
+    var castData = CastInfo(id: 0, cast: [])
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        callRequest()
+        dispatchGroupCallRequest()
     }
     
-    override func configureHierarchy() {
+    override func configHierarchy() {
         view.addSubview(tableView)
         view.addSubview(mainImageView)
         view.addSubview(mainTitleLabel)
     }
     
-    override func configureLayout() {
+    override func configLayout() {
         mainImageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(220)
@@ -46,14 +49,13 @@ class TrendDetailViewController: BaseViewController {
         }
     }
     
-    override func configureView() {
+    override func configView() {
         
         configureView("\(dataFromPreviousPage?.displayTitle ?? "미정") ")
         
         let backBarBtn = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backBarBtnTapped))
         navigationItem.leftBarButtonItem = backBarBtn
         
-        mainImageView.backgroundColor = .red
         let url = URL(string: "https://image.tmdb.org/t/p/w1280\(dataFromPreviousPage?.backdrop_path ?? "미정")")
         mainImageView.kf.setImage(with: url)
         mainTitleLabel.text = dataFromPreviousPage?.displayOriginalTitle
@@ -66,52 +68,66 @@ class TrendDetailViewController: BaseViewController {
         tableView.register(MediaCollectionTableViewCell.self, forCellReuseIdentifier: MediaCollectionTableViewCell.identifier)
     }
     
+    
+}
+
+extension TrendDetailViewController {
+    
     @objc func backBarBtnTapped() {
         
         dismiss(animated: true)
     }
     
-    func callRequest() {
+    func dispatchGroupCallRequest() {
         
         let group = DispatchGroup()
         
         group.enter()
         DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.movieData(api: .similarMovie(id: self.dataFromPreviousPage?.id ?? 0)) { movie, error in
-                if let error = error {
-                    print("에러남\(error)")
-                } else {
-                    guard let movie = movie else {return}
-                    self.imageList[0] = movie
-                    print("리스트에 비슷한 영화 정보 데이터 잘 담김-> 여기서 포스터 추출해서 이미지 넣기1")
-                }
-                group.leave()
-            }
+            self.similarMovieCallRequest()
         }
+        group.leave()
         
         group.enter()
         DispatchQueue.global().async(group: group) {
-            NetworkManager.shared.movieData(api: .recommendMovie(id: self.dataFromPreviousPage?.id ?? 0)) { movie, error in
-                if let error = error {
-                    print("에러남\(error)")
-                } else {
-                    guard let movie = movie else {return}
-                    self.imageList[1] = movie
-                    print("리스트에 추천 영화 정보 데이터 잘 담김-> 여기서 포스터 추출해서 이미지 넣기2")
-                }
-                group.leave()
+            self.castCallRequest()
+        }
+        group.leave()
+        
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
+        }
+    }
+    
+    
+    func similarMovieCallRequest() {
+        
+        NetworkManager.shared.request(api: .similarMovie(id: (self.dataFromPreviousPage?.id)!), model: Media.self) { movie, error in
+            if error != nil {
+                guard let movie = movie else {return}
+                self.movieData = movie
+            } else {
+                print("시밀러무비정보없음")
             }
         }
-        group.notify(queue: .main) {
-            print("작업 끝!")
-            self.tableView.reloadData()
+    }
+    
+    func castCallRequest() {
+        
+        NetworkManager.shared.castData(api: .movieCast(id: (dataFromPreviousPage?.id)!)) { cast, error in
+            if error != nil {
+                guard let cast = cast else {return}
+                self.castData = cast
+            } else {
+                print("캐스트정보 없음")
+            }
         }
     }
 }
 
 extension TrendDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return imageList.count
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,7 +136,6 @@ extension TrendDetailViewController: UITableViewDelegate, UITableViewDataSource 
         cell.collectionView.dataSource = self
         cell.collectionView.delegate = self
         cell.collectionView.register(ContentsCollectionViewCell.self, forCellWithReuseIdentifier: ContentsCollectionViewCell.identifier)
-        cell.collectionView.tag = indexPath.row
         cell.collectionView.reloadData()
         cell.configureView(data: indexPath.row)
         
@@ -130,13 +145,13 @@ extension TrendDetailViewController: UITableViewDelegate, UITableViewDataSource 
 
 extension TrendDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageList[collectionView.tag].count
+        return movieData.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentsCollectionViewCell.identifier, for: indexPath) as! ContentsCollectionViewCell
         
-        let data = imageList[collectionView.tag][indexPath.item]
+        let data = movieData.results[indexPath.item]
         cell.configUI(data: data)
         return cell
     }

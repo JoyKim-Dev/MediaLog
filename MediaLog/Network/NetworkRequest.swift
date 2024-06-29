@@ -31,7 +31,7 @@ enum TMDBRequest {
     case movieList(query: String, page: Int)
     case trendingMovie(time: Time)
     case recommendMovie(id:Int)
-    case nowPlayingMovie(region: Region)
+    case nowPlayingMovie
     case upcomingMovie
     case similarMovie(id: Int)
     case movieCast(id: Int)
@@ -51,9 +51,9 @@ enum TMDBRequest {
         case .recommendMovie(let id):
             return URL(string: baseURL + "movie/\(id)/recommendations")!
         case .nowPlayingMovie:
-            return URL(string: "movie/now_playing")!
+            return URL(string: baseURL + "movie/now_playing")!
         case .upcomingMovie:
-            return URL(string: "movie/upcoming")!
+            return URL(string: baseURL + "movie/upcoming")!
         case .similarMovie(let id):
             return URL(string: baseURL + "movie/\(id)/similar")!
         case .movieCast(let id):
@@ -81,7 +81,7 @@ enum TMDBRequest {
         case .trendingMovie, .recommendMovie, .similarMovie, .movieCast:
             return ["language": APILanguage.tmdbKorean]
         case .nowPlayingMovie, .upcomingMovie:
-            return ["language": APILanguage.tmdbKorean, "region": Region.korea ]
+            return ["language": APILanguage.tmdbKorean, "region": Region.korea.rawValue]
         case .moviePoster:
             return [:]
         }
