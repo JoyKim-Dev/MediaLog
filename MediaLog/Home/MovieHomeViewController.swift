@@ -16,9 +16,10 @@ class MovieHomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       dispatchGroupCallRequest()
-
+        dispatchGroupCallRequest()
     }
+    
+    
     
     override func configHierarchy() {
         view.addSubview(tableView)
@@ -48,21 +49,20 @@ extension MovieHomeViewController {
         group.enter()
         DispatchQueue.global().async(group: group) {
             self.nowPlayingCallRequest()
+            group.leave()
         }
-        group.leave()
-        
         
         group.enter()
         DispatchQueue.global().async(group: group) {
             self.upcomingMovieCallRequest()
+            group.leave()
         }
-        group.leave()
         
         group.enter()
         DispatchQueue.global().async(group: group) {
             self.movieTrendCallRequest()
+            group.leave()
         }
-        group.leave()
         
         group.notify(queue: .main) {
             self.tableView.reloadData()
@@ -77,6 +77,9 @@ extension MovieHomeViewController {
             } else {
                 guard let movie = movie else {return}
                 self.movieList[0] = movie
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -88,11 +91,13 @@ extension MovieHomeViewController {
             } else {
                 guard let movie = movie else {return}
                 self.movieList[1] = movie
-                print("업커밍==========================================")
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
                 
             }
-            }
         }
+    }
     
     func movieTrendCallRequest() {
         NetworkManager.shared.allMovieData(api: .trendingMovie(time: .day)) { movie, error in
@@ -101,8 +106,9 @@ extension MovieHomeViewController {
             } else {
                 guard let movie = movie else {return}
                 self.movieList[2] = movie
-                print("트렌드================================================")
-                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -118,7 +124,6 @@ extension MovieHomeViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieHomeTableViewCell.identifier, for: indexPath) as! MovieHomeTableViewCell
         
         cell.configUI(data: indexPath)
-        
         cell.collectionView.delegate = self
         cell.collectionView.dataSource = self
         cell.collectionView.register(MovieHomeCollectionViewCell.self, forCellWithReuseIdentifier: MovieHomeCollectionViewCell.identifier)
@@ -127,7 +132,7 @@ extension MovieHomeViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
         
     }
-   
+    
 }
 
 extension MovieHomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -140,8 +145,7 @@ extension MovieHomeViewController: UICollectionViewDelegate, UICollectionViewDat
         
         let data = movieList[collectionView.tag].results[indexPath.item]
         cell.configUI(data: data)
-       
-    
+        
         return cell
     }
 }

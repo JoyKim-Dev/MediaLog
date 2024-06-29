@@ -23,8 +23,9 @@ enum Color {
 }
 
 enum Font {
-    static let semiBold13forBasicInfo = UIFont.systemFont(ofSize: 13, weight: .semibold)
+    static let semiBold14forBasicInfo = UIFont.systemFont(ofSize: 14, weight: .semibold)
     static let semiBold16forSubLable = UIFont.systemFont(ofSize: 16, weight: .semibold)
+    
     static let heavy20forTitle = UIFont.systemFont(ofSize: 20, weight: .heavy)
     
     static let appTitleFont = UIFont.systemFont(ofSize: 50, weight: .black)
