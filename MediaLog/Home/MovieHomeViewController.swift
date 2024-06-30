@@ -32,7 +32,7 @@ class MovieHomeViewController: BaseViewController {
     }
     
     override func configView() {
-        configureView("MOVIE LOG")
+        configureView("MOVIE HOME")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 260
@@ -147,6 +147,13 @@ extension MovieHomeViewController: UICollectionViewDelegate, UICollectionViewDat
         cell.configUI(data: data)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = TrendDetailViewController()
+        vc.dataFromPreviousPage = movieList[collectionView.tag].results[indexPath.item]
+      present(vc, animated: true)
+
     }
 }
 

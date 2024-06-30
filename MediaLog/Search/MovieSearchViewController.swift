@@ -65,7 +65,7 @@ extension MovieSearchViewController {
     }
     
     func configUI() {
-        configureView("영화")
+        configureView("SEARCH MOVIE")
         
         movieCollectionView.backgroundColor = .white
         movieCollectionView.delegate = self
@@ -124,6 +124,13 @@ extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewD
         let data = list.results[indexPath.row]
         cell.configUI(data: data)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = TrendDetailViewController()
+        vc.dataFromPreviousPage = list.results[indexPath.item]
+        present(vc, animated: true)
+
     }
 }
 

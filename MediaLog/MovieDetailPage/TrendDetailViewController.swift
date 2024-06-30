@@ -204,5 +204,13 @@ extension TrendDetailViewController: UICollectionViewDelegate, UICollectionViewD
         cell.configUI(movieData: movieData, castData: castData, indexPath: indexPath, tableViewRow: collectionView.tag)
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView.tag == 2 {
+            let vc = TrendDetailViewController()
+            vc.dataFromPreviousPage = movieData.results[indexPath.item]
+          present(vc, animated: true)
+        }
+    }
     }
 

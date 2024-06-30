@@ -13,6 +13,7 @@ import Kingfisher
 
 class MovieCollectionViewCell: UICollectionViewCell {
     
+    
     let moviePosterImageView = UIImageView()
     let movieTitleLabel = UILabel()
     

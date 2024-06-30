@@ -38,7 +38,7 @@ extension MediaTrendViewController {
     }
     
     func configUI() {
-        configureView("MOVIE TREND")
+        configureView("MOVIE LOG")
         mediaTableView.delegate = self
         mediaTableView.dataSource = self
         mediaTableView.rowHeight = 400
@@ -65,20 +65,6 @@ extension MediaTrendViewController {
                 print("리스트에 무비 트렌드 데이터 잘 담김")
                 dump(movie)
             }
-            
-            
-            //        NetworkManager.shared.movieData(api: .trendingMovie(time: .day)) { movie, error in
-            //           
-            //            if let error = error {
-            //                print("에러남\(error)")
-            //            } else {
-            //                guard let movie = movie else {return}
-            //                self.list = movie
-            //                self.mediaTableView.reloadData()
-            //                print("리스트에 무비 트렌드 데이터 잘 담김")
-            //                dump(movie)
-            //            }
-            //        }
         }
     }
     
