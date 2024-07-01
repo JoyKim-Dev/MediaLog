@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MovieHomeCollectionViewCell: BaseCollectionViewCell {
+final class MovieHomeCollectionViewCell: BaseCollectionViewCell {
     
     let posterImageView = UIImageView()
     
@@ -26,14 +26,12 @@ class MovieHomeCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    func configUI(data: Result) {
+     func configUI(data: Result) {
         if let url = data.poster_path {
             let URL = URL(string: "https://image.tmdb.org/t/p/w780\(url)")
             posterImageView.kf.setImage(with: URL)
             posterImageView.layer.cornerRadius = CornerRadius.poster.Radius
             posterImageView.clipsToBounds = true
-            print("모서리")
-            print("이미지 호출됨")
         } else {
             posterImageView.image = UIImage(systemName: "star")
         }

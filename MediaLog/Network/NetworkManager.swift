@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class NetworkManager {
+final class NetworkManager {
     
     // singleton pattern : 무분별한 인스턴스 생성 방지.
     static let shared = NetworkManager()
@@ -72,7 +72,7 @@ class NetworkManager {
         }
     }
     
-    func movieData(api: TMDBRequest, completionHandler: @escaping MovieDataHandler) {
+   func movieData(api: TMDBRequest, completionHandler: @escaping MovieDataHandler) {
         print(#function)
         
         AF.request(api.endpoint,
@@ -97,7 +97,7 @@ class NetworkManager {
         }
     }
     
-    func castData(api: TMDBRequest, completionHandler: @escaping CastDataHandler) {
+   func castData(api: TMDBRequest, completionHandler: @escaping CastDataHandler) {
         print(#function)
         
         AF.request(api.endpoint,
@@ -122,7 +122,7 @@ class NetworkManager {
         }
     }
     
-    func posterData(api: TMDBRequest, completionHandler: @escaping PosterDataHandler) {
+   func posterData(api: TMDBRequest, completionHandler: @escaping PosterDataHandler) {
         print(#function)
         
         AF.request(api.endpoint,

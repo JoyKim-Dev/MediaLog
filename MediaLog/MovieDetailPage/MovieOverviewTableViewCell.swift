@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MovieOverviewTableViewCell: BaseTableViewCell {
+final class MovieOverviewTableViewCell: BaseTableViewCell {
     
     let mainLabel = UILabel()
     let lineView = UIView()

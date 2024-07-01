@@ -10,10 +10,10 @@ import UIKit
 import SnapKit
 import WebKit
 
-class YoutubeWebViewController: BaseViewController {
+final class YoutubeWebViewController: BaseViewController {
     
-    let webView = WKWebView()
-    var videoData = Video(id: 0, results: [])
+    private let webView = WKWebView()
+    private var videoData = Video(id: 0, results: [])
     var receivedMovieURL: String?
     
     override func viewDidLoad() {
@@ -43,7 +43,7 @@ class YoutubeWebViewController: BaseViewController {
        dismiss(animated: true)
     }
     
-    func requestWebView() {
+    private func requestWebView() {
         guard let url = receivedMovieURL else {
             print("유효하지 않은 url")
             return

@@ -11,7 +11,7 @@ import Kingfisher
 import SnapKit
 
 
-class MediaTrendTableViewCell: UITableViewCell {
+final class MediaTrendTableViewCell: UITableViewCell {
     
     let containerView: UIView = {
         let view = shadowView()

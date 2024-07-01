@@ -11,19 +11,19 @@ import Alamofire
 import SnapKit
 import Kingfisher
 
-class TrendDetailViewController: BaseViewController {
+final class TrendDetailViewController: BaseViewController {
     
     
-    let tableView = UITableView()
-    let mainImageView = UIImageView()
-    let mainTitleLabel = UILabel()
-    let youtubeLinkButton = UIButton()
+    private let tableView = UITableView()
+    private let mainImageView = UIImageView()
+    private let mainTitleLabel = UILabel()
+    private let youtubeLinkButton = UIButton()
     
-    lazy var url = URL(string: "https://image.tmdb.org/t/p/w1280\(dataFromPreviousPage?.backdrop_path ?? "미정")")
-    var dataFromPreviousPage: Result?
-    var movieData = Media(page: 0, results: [])
-    var castData = CastInfo(id: 0, cast: [])
-    var videoData: String?
+    private lazy var url = URL(string: "https://image.tmdb.org/t/p/w1280\(dataFromPreviousPage?.backdrop_path ?? "미정")")
+     var dataFromPreviousPage: Result?
+    private var movieData = Media(page: 0, results: [])
+    private var castData = CastInfo(id: 0, cast: [])
+    private var videoData: String?
     
     
     override func viewDidLoad() {
@@ -87,13 +87,13 @@ class TrendDetailViewController: BaseViewController {
         youtubeLinkButton.layer.cornerRadius = 10
         youtubeLinkButton.clipsToBounds = true
         youtubeLinkButton.addTarget(self, action: #selector(youtubeBtnTapped), for: .touchUpInside)
+        youtubeLinkButton.isHidden = true
     }
-    
     
 }
 extension TrendDetailViewController {
     
-    @objc func backBarBtnTapped() {
+     @objc func backBarBtnTapped() {
         
         dismiss(animated: true)
     }
@@ -107,7 +107,7 @@ extension TrendDetailViewController {
         present(nav, animated: false)
     }
     
-    func dispatchGroupCallRequest() {
+    private func dispatchGroupCallRequest() {
         print(#function)
         
         let group = DispatchGroup()
@@ -136,7 +136,7 @@ extension TrendDetailViewController {
     }
     
     
-    func similarMovieCallRequest() {
+    private func similarMovieCallRequest() {
         print(#function)
         NetworkManager.shared.request(api: .similarMovie(id: (self.dataFromPreviousPage?.id)!), model: Media.self) { movie, error in
             if error != nil {
@@ -151,7 +151,7 @@ extension TrendDetailViewController {
         }
     }
     
-    func castCallRequest() {
+    private func castCallRequest() {
         print(#function)
         NetworkManager.shared.castData(api: .movieCast(id: (dataFromPreviousPage?.id)!)) { cast, error in
             if error != nil {
@@ -167,17 +167,28 @@ extension TrendDetailViewController {
         }
     }
     
-    func trailerVideoCallRequest() {
+    private func trailerVideoCallRequest() {
         print(#function)
         guard let id = dataFromPreviousPage?.id else { return}
         
         NetworkManager.shared.request(api: .movieTrailerVideo(id: id), model: Video.self) { video, error in
-            if error != nil {
-                print("id 없음")
+           
+            if let error = error {
+                print("에러 발생")
+            } else if let videoResults = video?.results, !videoResults.isEmpty {
+                if let Key = videoResults.first?.key {
+                    self.videoData = "https://www.youtube.com/watch?v=\(Key)"
+                } else {
+                    print("키 없음")
+                    self.videoData = nil
+                }
             } else {
-                guard let video = video?.results[0].key else {return}
-                print(video)
-                self.videoData = "https://www.youtube.com/watch?v=\(video)"
+                print("비디오 데이터 없음")
+                self.videoData = nil
+            }
+
+            DispatchQueue.main.async {
+                self.youtubeLinkButton.isHidden = self.videoData == nil
             }
         }
     }

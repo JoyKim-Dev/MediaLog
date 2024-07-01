@@ -11,7 +11,7 @@ import Alamofire
 import SnapKit
 import Kingfisher
 
-class ContentsCollectionViewCell: UICollectionViewCell {
+final class ContentsCollectionViewCell: UICollectionViewCell {
     
     let moviePosterImageView = UIImageView()
 

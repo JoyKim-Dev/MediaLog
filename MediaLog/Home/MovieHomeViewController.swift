@@ -8,10 +8,10 @@
 import UIKit
 import MapKit
 
-class MovieHomeViewController: BaseViewController {
+final class MovieHomeViewController: BaseViewController {
     
-    let tableView = UITableView()
-    var movieList: [Media] = [Media(page: 1, results: []), Media(page: 1, results: []), Media(page: 1, results: [])]
+    private let tableView = UITableView()
+    private var movieList: [Media] = [Media(page: 1, results: []), Media(page: 1, results: []), Media(page: 1, results: [])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,7 @@ class MovieHomeViewController: BaseViewController {
 
 extension MovieHomeViewController {
     
-    func dispatchGroupCallRequest() {
+    private func dispatchGroupCallRequest() {
         
         let group = DispatchGroup()
         
@@ -70,7 +70,7 @@ extension MovieHomeViewController {
     }
     
     
-    func nowPlayingCallRequest() {
+    private func nowPlayingCallRequest() {
         NetworkManager.shared.request(api: .nowPlayingMovie, model: Media.self) { movie, error in
             if let error = error {
                 print("나우플레잉 에러\(error)")
@@ -84,7 +84,7 @@ extension MovieHomeViewController {
         }
     }
     
-    func upcomingMovieCallRequest() {
+    private func upcomingMovieCallRequest() {
         NetworkManager.shared.allMovieData(api: .upcomingMovie) { movie, error in
             if let error = error {
                 print("업커밍 에러\(error)")
@@ -99,7 +99,7 @@ extension MovieHomeViewController {
         }
     }
     
-    func movieTrendCallRequest() {
+    private func movieTrendCallRequest() {
         NetworkManager.shared.allMovieData(api: .trendingMovie(time: .day)) { movie, error in
             if let error = error {
                 print("올무비 에러\(error)")
@@ -120,7 +120,7 @@ extension MovieHomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieHomeTableViewCell.identifier, for: indexPath) as! MovieHomeTableViewCell
         
         cell.configUI(data: indexPath)
@@ -149,7 +149,7 @@ extension MovieHomeViewController: UICollectionViewDelegate, UICollectionViewDat
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = TrendDetailViewController()
         vc.dataFromPreviousPage = movieList[collectionView.tag].results[indexPath.item]
       present(vc, animated: true)

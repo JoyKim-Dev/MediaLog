@@ -9,10 +9,10 @@ import UIKit
 import SnapKit
 import Alamofire
 
-class MediaTrendViewController: UIViewController {
+final class MediaTrendViewController: UIViewController {
     
-    let mediaTableView = UITableView()
-    var list: [Result] = []
+    private let mediaTableView = UITableView()
+    private var list: [Result] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +27,17 @@ class MediaTrendViewController: UIViewController {
 
 extension MediaTrendViewController {
     
-    func configHierarchy() {
+    private func configHierarchy() {
         view.addSubview(mediaTableView)
     }
     
-    func configLayout() {
+    private func configLayout() {
         mediaTableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
-    func configUI() {
+    private func configUI() {
         configureView("MOVIE LOG")
         mediaTableView.delegate = self
         mediaTableView.dataSource = self
@@ -52,7 +52,7 @@ extension MediaTrendViewController {
         
     }
     
-    func callRequest() {
+    private func callRequest() {
         
         NetworkManager.shared.request(api: .trendingMovie(time: .day), model: Media.self) {
             movie, error in

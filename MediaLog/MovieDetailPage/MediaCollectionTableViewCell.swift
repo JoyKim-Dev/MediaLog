@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MediaCollectionTableViewCell: UITableViewCell {
+final class MediaCollectionTableViewCell: UITableViewCell {
 
     let titleLabel = {
         let view = UILabel()
@@ -16,7 +16,7 @@ class MediaCollectionTableViewCell: UITableViewCell {
         return view
     }()
     
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -41,11 +41,11 @@ class MediaCollectionTableViewCell: UITableViewCell {
         return layout
     }
     
-func configureHierarchy() {
+     func configureHierarchy() {
         contentView.addSubview(titleLabel)
         contentView.addSubview(collectionView)
     }
-func configureLayout() {
+    func configureLayout() {
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
             make.horizontalEdges.top.equalTo(contentView).inset(20)
@@ -56,7 +56,7 @@ func configureLayout() {
             make.top.equalTo(titleLabel.snp.bottom)
         }
     }
-    func configureView(data: Int) {
+     func configureView(data: Int) {
     
         titleLabel.font = Font.semiBold16forSubLable
         

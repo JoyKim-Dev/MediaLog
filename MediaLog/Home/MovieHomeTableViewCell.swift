@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-class MovieHomeTableViewCell: BaseTableViewCell {
+final class MovieHomeTableViewCell: BaseTableViewCell {
     
-    let titleLable = UILabel()
+     let titleLable = UILabel()
     
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
+     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,7 +35,7 @@ class MovieHomeTableViewCell: BaseTableViewCell {
         }
     }
     
-    func configUI(data: IndexPath) {
+     func configUI(data: IndexPath) {
         super.configUI()
         titleLable.font = Font.semiBold16forSubLable
         titleLable.textColor = Color.blackForBasicText
@@ -52,7 +52,7 @@ class MovieHomeTableViewCell: BaseTableViewCell {
 
 extension MovieHomeTableViewCell {
     
-    func collectionViewLayout() -> UICollectionViewLayout {
+     func collectionViewLayout() -> UICollectionViewLayout {
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 140, height:210)

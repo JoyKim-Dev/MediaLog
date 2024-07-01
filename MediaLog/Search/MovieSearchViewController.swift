@@ -11,13 +11,13 @@ import Alamofire
 import SnapKit
 
 
-class MovieSearchViewController: UIViewController {
+final class MovieSearchViewController: UIViewController {
 
-    let searchBar = UISearchBar()
-    lazy var movieCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
+    private let searchBar = UISearchBar()
+    private lazy var movieCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
     
-    var page = 1
-    var list = Media(page: 1, results: [])
+    private var page = 1
+    private var list = Media(page: 1, results: [])
     
     
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ class MovieSearchViewController: UIViewController {
     }
         
 
-    func collectionViewLayout() -> UICollectionViewLayout {
+    private func collectionViewLayout() -> UICollectionViewLayout {
         
         print(#function)
         
@@ -48,12 +48,12 @@ class MovieSearchViewController: UIViewController {
 
 extension MovieSearchViewController {
     
-    func configHierarchy() {
+    private func configHierarchy() {
         view.addSubview(searchBar)
         view.addSubview(movieCollectionView)
     }
     
-    func configLayout() {
+    private func configLayout() {
         searchBar.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -64,7 +64,7 @@ extension MovieSearchViewController {
         }
     }
     
-    func configUI() {
+    private func configUI() {
         configureView("SEARCH MOVIE")
         
         movieCollectionView.backgroundColor = .white
@@ -82,7 +82,7 @@ extension MovieSearchViewController {
                    view.addGestureRecognizer(tap)
     }
     
-    func callRequest(query: String) {
+    private func callRequest(query: String) {
         print(#function)
         
         NetworkManager.shared.allMovieData(api: .movieList(query: searchBar.text ?? "미정", page: page)) { movie, error in
@@ -105,7 +105,7 @@ extension MovieSearchViewController {
         }
     }
     
-func dismissKeyboard(_ searchBar: UISearchBar) {
+    private func dismissKeyboard(_ searchBar: UISearchBar) {
             searchBar.resignFirstResponder()
         }
     
@@ -113,7 +113,7 @@ func dismissKeyboard(_ searchBar: UISearchBar) {
 }
 
 extension MovieSearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         print(list.results.count)
         return list.results.count
     }

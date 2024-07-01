@@ -11,7 +11,7 @@ import Alamofire
 import SnapKit
 import Kingfisher
 
-class MovieCollectionViewCell: UICollectionViewCell {
+final class MovieCollectionViewCell: UICollectionViewCell {
     
     
     let moviePosterImageView = UIImageView()
@@ -35,7 +35,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
 
 extension MovieCollectionViewCell {
     
-    func configHierarchy() {
+     func configHierarchy() {
         contentView.addSubview(moviePosterImageView)
         contentView.addSubview(movieTitleLabel)
     }
@@ -52,7 +52,7 @@ extension MovieCollectionViewCell {
         }
     }
     
-    func configUI(data: Result) {
+     func configUI(data: Result) {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
         contentView.backgroundColor = Constant.Color.GrayLineBg
