@@ -71,3 +71,13 @@ struct CastDetail: Decodable {
     let character: String?
 }
 
+// MARK: - Video Data
+
+struct Video: Decodable {
+    let id: Int
+    let results: [VideoResults]
+}
+
+struct VideoResults: Decodable {
+    let key: String
+}

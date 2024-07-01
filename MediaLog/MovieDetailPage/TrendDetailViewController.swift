@@ -17,15 +17,25 @@ class TrendDetailViewController: BaseViewController {
     let tableView = UITableView()
     let mainImageView = UIImageView()
     let mainTitleLabel = UILabel()
+    let youtubeLinkButton = UIButton()
     
+    lazy var url = URL(string: "https://image.tmdb.org/t/p/w1280\(dataFromPreviousPage?.backdrop_path ?? "미정")")
     var dataFromPreviousPage: Result?
     var movieData = Media(page: 0, results: [])
     var castData = CastInfo(id: 0, cast: [])
+    var videoData: String?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print(#function)
+        let backBarBtn = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backBarBtnTapped))
+        navigationItem.leftBarButtonItem = backBarBtn
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(MediaCollectionTableViewCell.self, forCellReuseIdentifier: MediaCollectionTableViewCell.identifier)
+        tableView.register(MovieOverviewTableViewCell.self, forCellReuseIdentifier: MovieOverviewTableViewCell.identifier)
         dispatchGroupCallRequest()
     }
     
@@ -34,6 +44,7 @@ class TrendDetailViewController: BaseViewController {
         view.addSubview(tableView)
         view.addSubview(mainImageView)
         view.addSubview(mainTitleLabel)
+        view.addSubview(youtubeLinkButton)
     }
     
     override func configLayout() {
@@ -42,10 +53,17 @@ class TrendDetailViewController: BaseViewController {
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(220)
         }
+        
         mainTitleLabel.snp.makeConstraints { make in
             make.leading.top.width.equalTo(view.safeAreaLayoutGuide).inset(20)
-            
         }
+        
+        youtubeLinkButton.snp.makeConstraints { make in
+            make.bottom.trailing.equalTo(mainImageView).inset(20)
+            make.width.equalTo(100)
+            make.height.equalTo(30)
+        }
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(mainImageView.snp.bottom)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -57,28 +75,36 @@ class TrendDetailViewController: BaseViewController {
         
         configureView("\(dataFromPreviousPage?.displayTitle ?? "미정") ")
         
-        let backBarBtn = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backBarBtnTapped))
-        navigationItem.leftBarButtonItem = backBarBtn
-        
-        let url = URL(string: "https://image.tmdb.org/t/p/w1280\(dataFromPreviousPage?.backdrop_path ?? "미정")")
         mainImageView.kf.setImage(with: url)
         mainTitleLabel.text = dataFromPreviousPage?.displayOriginalTitle
         mainTitleLabel.font = .systemFont(ofSize: 22, weight: .heavy)
         mainTitleLabel.textColor = .white
         
-    
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(MediaCollectionTableViewCell.self, forCellReuseIdentifier: MediaCollectionTableViewCell.identifier)
-        tableView.register(MovieOverviewTableViewCell.self, forCellReuseIdentifier: MovieOverviewTableViewCell.identifier)
+        youtubeLinkButton.setTitleColor(.white, for: .normal)
+        youtubeLinkButton.setTitle("YouTube", for: .normal)
+        youtubeLinkButton.titleLabel?.font = Font.heavy20forTitle
+        youtubeLinkButton.backgroundColor = .red
+        youtubeLinkButton.layer.cornerRadius = 10
+        youtubeLinkButton.clipsToBounds = true
+        youtubeLinkButton.addTarget(self, action: #selector(youtubeBtnTapped), for: .touchUpInside)
     }
+    
+    
 }
-
 extension TrendDetailViewController {
     
     @objc func backBarBtnTapped() {
         
         dismiss(animated: true)
+    }
+    
+    @objc func youtubeBtnTapped() {
+        let vc = YoutubeWebViewController()
+        guard let videoData = videoData else {return}
+        vc.receivedMovieURL = videoData
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: false)
     }
     
     func dispatchGroupCallRequest() {
@@ -92,10 +118,15 @@ extension TrendDetailViewController {
             group.leave()
         }
         
-        
         group.enter()
         DispatchQueue.global().async(group: group) {
             self.castCallRequest()
+            group.leave()
+        }
+        
+        group.enter()
+        DispatchQueue.global().async(group: group) {
+            self.trailerVideoCallRequest()
             group.leave()
         }
         
@@ -116,7 +147,6 @@ extension TrendDetailViewController {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                
             }
         }
     }
@@ -133,7 +163,21 @@ extension TrendDetailViewController {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                
+            }
+        }
+    }
+    
+    func trailerVideoCallRequest() {
+        print(#function)
+        guard let id = dataFromPreviousPage?.id else { return}
+        
+        NetworkManager.shared.request(api: .movieTrailerVideo(id: id), model: Video.self) { video, error in
+            if error != nil {
+                print("id 없음")
+            } else {
+                guard let video = video?.results[0].key else {return}
+                print(video)
+                self.videoData = "https://www.youtube.com/watch?v=\(video)"
             }
         }
     }
@@ -182,7 +226,7 @@ extension TrendDetailViewController: UITableViewDelegate, UITableViewDataSource 
 }
 
 extension TrendDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-   
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         print(#function)
         if collectionView.tag == 1 {
@@ -209,8 +253,8 @@ extension TrendDetailViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView.tag == 2 {
             let vc = TrendDetailViewController()
             vc.dataFromPreviousPage = movieData.results[indexPath.item]
-          present(vc, animated: true)
+            present(vc, animated: true)
         }
     }
-    }
+}
 

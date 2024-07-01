@@ -22,6 +22,7 @@
 		35754E0F2C1898DD00B1B8F0 /* MovieSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E0E2C1898DD00B1B8F0 /* MovieSearchViewController.swift */; };
 		35754E112C189BF500B1B8F0 /* VC + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E102C189BF500B1B8F0 /* VC + Extension.swift */; };
 		35754E132C18A25B00B1B8F0 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35754E122C18A25B00B1B8F0 /* MovieCollectionViewCell.swift */; };
+		3590F25F2C32B9BF00652DBA /* YoutubeWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3590F25E2C32B9BF00652DBA /* YoutubeWebViewController.swift */; };
 		359733042C2AAC96007BD56E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359733032C2AAC96007BD56E /* BaseViewController.swift */; };
 		359733062C2AB9A6007BD56E /* MediaCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359733052C2AB9A6007BD56E /* MediaCollectionTableViewCell.swift */; };
 		359733082C2AE085007BD56E /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359733072C2AE085007BD56E /* NetworkManager.swift */; };
@@ -62,6 +63,7 @@
 		35754E0E2C1898DD00B1B8F0 /* MovieSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchViewController.swift; sourceTree = "<group>"; };
 		35754E102C189BF500B1B8F0 /* VC + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC + Extension.swift"; sourceTree = "<group>"; };
 		35754E122C18A25B00B1B8F0 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		3590F25E2C32B9BF00652DBA /* YoutubeWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeWebViewController.swift; sourceTree = "<group>"; };
 		359733032C2AAC96007BD56E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		359733052C2AB9A6007BD56E /* MediaCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaCollectionTableViewCell.swift; sourceTree = "<group>"; };
 		359733072C2AE085007BD56E /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				359733052C2AB9A6007BD56E /* MediaCollectionTableViewCell.swift */,
 				35BFE71C2C29A50F0002D63D /* ContentsCollectionViewCell.swift */,
 				357037632C30585F004323EC /* MovieOverviewTableViewCell.swift */,
+				3590F25E2C32B9BF00652DBA /* YoutubeWebViewController.swift */,
 			);
 			path = MovieDetailPage;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				35BFE71D2C29A50F0002D63D /* ContentsCollectionViewCell.swift in Sources */,
 				35F25F2E2C16F53F000917C9 /* ViewController.swift in Sources */,
 				35F25F4F2C170A48000917C9 /* ReuseIdentifierProtocol.swift in Sources */,
+				3590F25F2C32B9BF00652DBA /* YoutubeWebViewController.swift in Sources */,
 				35F25F4B2C1709B5000917C9 /* MediaTrendViewController.swift in Sources */,
 				359733042C2AAC96007BD56E /* BaseViewController.swift in Sources */,
 				35F25F2A2C16F53F000917C9 /* AppDelegate.swift in Sources */,

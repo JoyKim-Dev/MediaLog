@@ -28,5 +28,6 @@ class BaseViewController: UIViewController {
     func configView() {
         print("Base", #function)
     }
-
 }
+
+

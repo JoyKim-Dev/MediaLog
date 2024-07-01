@@ -36,6 +36,7 @@ enum TMDBRequest {
     case similarMovie(id: Int)
     case movieCast(id: Int)
     case moviePoster(id: Int)
+    case movieTrailerVideo(id:Int)
     
     //enum이라 저장 프로퍼티 사용 불가 >> 연산 프로퍼티 - get 사용
     var baseURL: String {
@@ -60,6 +61,8 @@ enum TMDBRequest {
             return URL(string: baseURL + "movie/\(id)/credits")!
         case .moviePoster(let id):
             return URL(string: baseURL + "movie/\(id)/images")!
+        case .movieTrailerVideo(id: let id):
+            return URL(string: baseURL + "movie/\(id)/videos")!
         }
     }
     
@@ -78,7 +81,7 @@ enum TMDBRequest {
         switch self {
         case .movieList(let query, let page):
             return ["language": APILanguage.tmdbKorean, "query": query,"page": page]
-        case .trendingMovie, .recommendMovie, .similarMovie, .movieCast:
+        case .trendingMovie, .recommendMovie, .similarMovie, .movieCast, .movieTrailerVideo:
             return ["language": APILanguage.tmdbKorean]
         case .nowPlayingMovie, .upcomingMovie:
             return ["language": APILanguage.tmdbKorean, "region": Region.korea.rawValue]
